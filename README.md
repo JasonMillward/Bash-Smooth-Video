@@ -3,10 +3,10 @@ Smooth Video Creation
 
 
 ## Requirements
-*ImageMagick
-*python 2.6 or 2.7
-*python-youtube-upload
-*python-gdata
+* ImageMagick
+* python 2.6 or 2.7
+* python-youtube-upload
+* python-gdata
 
 
 ## Usage
