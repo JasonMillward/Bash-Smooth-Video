@@ -23,8 +23,6 @@ YTU_DIR=""
 YT_EMAIL=""
 YT_PASS=""
 
-
-
 #################################
 #                               #
 #   End configuration options   #
@@ -41,7 +39,8 @@ function USAGE ()
     echo "OPTIONS:"
     echo ""
     echo "    y: Upload to youtube             [y/n]"
-    echo "    c: Scale of video                [1024:768]"
+    echo "    s: Scale of video                [1024:768]"
+    echo "    c: Cleanup files after upload    [y/n]"
     echo ""
     echo ""
     echo "EXAMPLE:"
@@ -77,9 +76,6 @@ function UPLOAD ()
                     --description="" \
                     --keywords="" \
                     $SAVE_AS
-    # Remove movie as it is now on youtube 
-    rm $SAVE_AS
-    rm -rf $TEMP_DIR
 }
 
 function MAKESMOOTH () 
@@ -141,11 +137,21 @@ function MAKESMOOTH ()
 
 }
 
-while getopts ":y:c:?" Option
+function CLEANUP () {
+
+    # Remove movie as it is now on youtube
+    rm $SAVE_AS
+    rm -rf $TEMP_DIR
+
+}
+
+
+while getopts ":y:s:c:?" Option
 do
     case $Option in
         y    ) YOUTUBE=$OPTARG;;
-        c    ) SCALE=$OPTARG;;
+        s    ) SCALE=$OPTARG;;
+        c    ) CLEAN=$OPTARG;;
         ?    ) USAGE
                exit 0;;
         *    ) echo ""
@@ -161,4 +167,10 @@ MAKEMOVIE
 if [[ $YOUTUBE =~ "y" ]]
 then
     UPLOAD    
+fi
+
+
+if [[ $CLEAN =~ "y" ]]
+then
+    CLEANUP
 fi
