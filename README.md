@@ -1,5 +1,10 @@
-Smooth Video Creation
-=====================
+# Smooth Video Creation
+
+This small script creates a smooth video based on a directory of jpg files with additional fading. 
+
+
+[Preview of output](http://www.youtube.com/watch?v=zKM15etZ-Hs).
+
 
 
 ## Requirements
@@ -10,4 +15,4 @@ Smooth Video Creation
 
 
 ## Usage
-makeSmooth.sh -ms [y/n] -ss [10,20,50] -up [y/n] -is [1024:768]
+./makeSmooth.sh -y y -c 1024:768
