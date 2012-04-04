@@ -24,7 +24,6 @@ YT_EMAIL=""
 YT_PASS=""
 
 
-
 #################################
 #                               #
 #   End configuration options   #
@@ -77,9 +76,6 @@ function UPLOAD ()
                     --description="" \
                     --keywords="" \
                     $SAVE_AS
-    # Remove movie as it is now on youtube 
-    rm $SAVE_AS
-    rm -rf $TEMP_DIR
 }
 
 function MAKESMOOTH () 
