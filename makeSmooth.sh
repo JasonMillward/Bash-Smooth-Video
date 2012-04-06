@@ -70,12 +70,12 @@ function MAKEMOVIE ()
 function UPLOAD ()
 {
     # Call the youtube uploader with required params
-    python $YTU_DIR --email="$YT_EMAIL" --password="$YT_PASS" \
-                    --category="Tech" \
-                    --title="My Video" \
-                    --description="" \
-                    --keywords="" \
-                    $SAVE_AS
+    python "$YTU_DIR/youtube_upload.py" --email="$YT_EMAIL" --password="$YT_PASS" \
+                                        --category="Tech" \
+                                        --title="My Video" \
+                                        --description="" \
+                                        --keywords="" \
+                                        $SAVE_AS
 }
 
 function MAKESMOOTH () 
