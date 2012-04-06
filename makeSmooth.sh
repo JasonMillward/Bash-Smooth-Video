@@ -34,17 +34,17 @@ function USAGE ()
 {
     echo ""
     echo "USAGE: "
-    echo "    makeSmooth.sh [-?yc]"
+    echo "    makeSmooth.sh [-?yc -s]"
     echo ""
     echo "OPTIONS:"
     echo ""
-    echo "    y: Upload to youtube             [y/n]"
-    echo "    s: Scale of video                [1024:768]"
-    echo "    c: Cleanup files after upload    [y/n]"
+    echo "    -y : Upload to Youtube                    (Default: No )"
+    echo "    -c : Cleanup after creation (Use with -y) (Default: No )"
+    echo "    -s : Scale of video output                (Default: [1024:768] )"
     echo ""
     echo ""
     echo "EXAMPLE:"
-    echo "    ./makeSmooth.sh -y y -c 1024:768"
+    echo "    ./makeSmooth.sh -yc -s 1024:768"
     echo ""
     exit $E_OPTERROR 
 }
@@ -137,21 +137,21 @@ function MAKESMOOTH ()
 
 }
 
-function CLEANUP () {
-
+function CLEANUP () 
+{
     # Remove movie as it is now on youtube
     rm $SAVE_AS
     rm -rf $TEMP_DIR
 
 }
 
-
-while getopts ":y:s:c:?" Option
+# Get options and flags
+while getopts "ycs:?" Option
 do
     case $Option in
-        y    ) YOUTUBE=$OPTARG;;
+        y    ) YOUTUBE=true;;
+        c    ) CLEAN=true;;
         s    ) SCALE=$OPTARG;;
-        c    ) CLEAN=$OPTARG;;
         ?    ) USAGE
                exit 0;;
         *    ) echo ""
@@ -161,16 +161,29 @@ do
 done
 
 
-MAKESMOOTH
-MAKEMOVIE
 
-if [[ $YOUTUBE =~ "y" ]]
+# Check to see if scale has been set
+# If not, set it to 1024:768 as default 
+if [ -z $SCALE ]
 then
-    UPLOAD    
+    SCALE="1024:768"
 fi
 
+# Start the ImageMagick
+MAKESMOOTH
 
-if [[ $CLEAN =~ "y" ]]
+# Encode the movie 
+MAKEMOVIE
+
+# Upload to YouTube if specified
+if [ $YOUTUBE ]
+then
+    UPLOAD   
+fi
+
+# Cleanup leftover files
+# If you use this without uploading to YouTube you will use everything
+if [ $CLEAN  ]
 then
     CLEANUP
 fi
