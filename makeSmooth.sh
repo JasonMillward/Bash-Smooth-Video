@@ -13,7 +13,7 @@ IMG_DIR=""
 TEMP_DIR="/tmp/$(date +"%s")"
 
 # Path and filename of the video
-SAVE_AS="/tmp/movie.avi"
+SAVE_AS=""
 
 # Youtube automated uploader path (Optional)
 YTU_DIR=""
@@ -29,6 +29,15 @@ YT_PASS=""
 #                               #
 #################################
 
+# Store the starting time
+D1=`date +%s`
+
+# Text color variables
+txtred='\e[0;31m'       # red
+txtgrn='\e[0;32m'       # green
+txtwht='\e[1;37m'       # white
+txtylw='\e[0;33m'       # yellow
+txtrst='\e[0m'          # Text reset
 
 function USAGE ()
 {
@@ -49,8 +58,24 @@ function USAGE ()
     exit $E_OPTERROR 
 }
 
+function SHOWTIME ()
+{
+    # Store the finishing time
+    D2=`date +%s`
+
+    # Do some subtraction
+    ((diff_sec=D2-D1))
+    
+    # Use maths to show how long it took the script to complete 
+    echo ""
+    echo -e "${txtgrn}Time to complete${txtrst}"
+    echo - | awk '{printf "%d Hours %d Minutes %d Seconds","'"$diff_sec"'"/(60*60),"'"$diff_sec"'"%(60*60)/60,"'"$diff_sec"'"%60}'
+    echo ""
+}
+
 function MAKEMOVIE ()
 {
+    echo -e "${txtwht}[$(date +"%r")] Starting movie making process...${txtrst}"
     # Travel down to the temp dir
     cd $TEMP_DIR
     
@@ -59,27 +84,37 @@ function MAKEMOVIE ()
     rm "000000001.jpg"
     
     # Encode the movie
-    mencoder "mf://*.jpg" -mf fps=22:type=jpg \
+    mencoder "mf://*.jpg" -mf fps=30:type=jpg \
                           -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell:vbitrate=7000 \
                           -noskip \
                           -vf scale=$SCALE \
                           -oac copy \
                           -o $SAVE_AS
+
+    echo -e "${txtwht}Completed movie making process${txtrst}"
+    echo ""
 }
 
 function UPLOAD ()
 {
+    echo -e "${txtwht}[$(date +"%r")] Starting upload process...${txtrst}"
+
     # Call the youtube uploader with required params
     python "$YTU_DIR/youtube_upload.py" --email="$YT_EMAIL" --password="$YT_PASS" \
                                         --category="Tech" \
-                                        --title="My Video" \
+                                        --title="" \
                                         --description="" \
                                         --keywords="" \
                                         $SAVE_AS
+
+    echo -e "${txtwht}Completed upload process${txtrst}"
+    echo ""
 }
 
 function MAKESMOOTH () 
-{    
+{       
+    echo -e "${txtwht}[$(date +"%r")] Starting smoothing process...${txtrst}"
+
     # Make the temp dir if it doesn't exist
     mkdir -p $TEMP_DIR
     
@@ -134,15 +169,19 @@ function MAKESMOOTH ()
             # This can get quite intensive 
             sleep 3s
     done
-
+    echo -e "${txtwht}Completed smoothing process${txtrst}"
+    echo ""
 }
 
 function CLEANUP () 
 {
+    echo -e "${txtwht}[$(date +"%r")] Starting cleanup process${txtrst}"
+
     # Remove movie as it is now on youtube
     rm $SAVE_AS
     rm -rf $TEMP_DIR
-
+    echo -e "${txtwht}Completed cleanup process${txtrst}"
+    echo ""
 }
 
 # Get options and flags
@@ -160,12 +199,14 @@ do
     esac
 done
 
-
+# Show that the script has started 
+echo -e "${txtwht}Script initialised${txtrst}" $DEBUG
 
 # Check to see if scale has been set
 # If not, set it to 1024:768 as default 
 if [ -z $SCALE ]
 then
+    echo -e "${txtylw}No scale set, using default: 1024:768${txtrst}"
     SCALE="1024:768"
 fi
 
@@ -187,3 +228,6 @@ if [ $CLEAN  ]
 then
     CLEANUP
 fi
+
+# Show time for completion
+SHOWTIME
