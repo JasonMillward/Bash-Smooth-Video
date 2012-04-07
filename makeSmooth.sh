@@ -200,7 +200,7 @@ do
 done
 
 # Show that the script has started 
-echo -e "${txtwht}Script initialised${txtrst}" $DEBUG
+echo -e "${txtwht}Script initialised${txtrst}"
 
 # Check to see if scale has been set
 # If not, set it to 1024:768 as default 
