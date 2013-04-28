@@ -25,7 +25,7 @@ This small script creates a smooth video based on a directory of jpg files with 
 ```TEMP_DIR="/tmp/$(date +"%s")"```
 
 * File and path to where you would like to save the movie when compiled
-```SAVE_AS="/tmp/movie.avi"```
+``` SAVE_AS="/tmp/movie.avi" ```
 
 * Path to python-youtube-upload
 ```YTU_DIR=""```
@@ -46,8 +46,7 @@ This small script creates a smooth video based on a directory of jpg files with 
 ```./makeSmooth.sh -y -s 600:400```
 
 * After uploading it to YouTube, you want to clean up the left over files
-```./makeSmooth.sh -yc -s 600:400
-```
+```./makeSmooth.sh -yc -s 600:400```
 
 * To erase everything without uploading to YouTube
 ```./makeSmooth.sh -c -s 600:400```
